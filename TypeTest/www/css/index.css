@@ -1,0 +1,29 @@
+﻿
+
+.center-submit
+{
+    margin-top: 20px;
+}
+
+.inputError
+{
+    background-color: #ff9999;
+    color: #ff1a1a;
+}
+
+.boldWord
+{
+    font-weight: bold;
+}
+
+.textInputNormal
+{
+     background-color: #ffffff; 
+     color: #000000;
+}
+
+.textInputError
+{
+     background-color: #ff9999; 
+     color: #ff1a1a;
+}

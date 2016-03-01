@@ -1,0 +1,3 @@
+Challenge 1: Getting angular to detect ANY change in the input text
+Challenge 2: Detecting space character since $scope.$watch doesn't do it automatically. This had to be done through jQuery "keypress" event.
+

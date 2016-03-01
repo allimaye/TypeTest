@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+<html>
+<body>
+    <md-dialog>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h1>Instructions</h1>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="closeDialog()">
+                    <md-icon md-svg-src="images/stats_icon.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <ul>
+                    <li>1. Fill out user information</li>
+                    <li>2. After clicking "OK", you will see a signal to indicate you should start typing</li>
+                    <li>3. Type the paragraph in colored words into the text box above it as fast as you can.</li>
+                    <li>4. Look in the statistics tab to see your typing speed and accuracy</li>
+                    <p>
+                        A few extra notes: 
+
+                        <ul>
+                            <li>Click sound icon (show icon here) to turn on dictation. The next word you have to type will be read to you.</li>
+                            <li>You will notice that the words are color coded to show which words you have completed, which word you are
+                        currently on, and which words you still need to type.</li>
+                        </ul>
+
+                        Have fun!   
+                    </p>
+                </ul>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button ng-click="closeDialog()" class="md-primary">OK</md-button>
+        </md-dialog-actions>
+    </md-dialog>
+</body>
+</html>

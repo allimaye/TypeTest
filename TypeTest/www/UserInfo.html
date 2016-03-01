@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+
+<html>
+    <body>
+        <md-dialog>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h1>User information</h1>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="closeDialog()">
+                        <md-icon md-svg-src="images/stats_icon.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <form ng-controller="FormController as formCtrl" class="md-padding">
+                    <h1 class="md-title">User information</h1>
+                    <md-input-container class="md-block">
+                        <label>First Name</label>
+                        <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
+                        <input ng-model="user.firstname">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Last Name</label>
+                        <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
+                        <input ng-model="user.lastname">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Estimated Typing Speed (wpm)</label>
+                        <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
+                        <md-select ng-model="chosen_speed">
+                            <md-option ng-repeat="speed in est_speeds" value="{{speed}}">
+                                {{speed}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    {{chosen_speed}}
+                </form>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button ng-click="closeDialog()" class="md-primary">OK</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+
+
+
+        <!--<div>
+            <form ng-controller="FormController as formCtrl" class="md-padding">
+                <h1 class="md-title">User information</h1>
+                <div layout="row" layout-wrap>
+                    <div flex></div>
+                    <div flex="30">
+                        <md-input-container>
+                            <label>First Name</label>
+                            <md-icon md-png-src="/res/icons/windows/person_icon.png" class="name"></md-icon>
+                            <input ng-model="user.firstname">
+                        </md-input-container>
+                    </div>
+                    <div flex="30">
+                        <md-input-container>
+                            <label>Last Name</label>
+                            <input ng-model="user.lastname">
+                        </md-input-container>
+                    </div>
+                    <div flex="20">
+                        <md-input-container class="md-block">
+                            <label>Estimated Typing Speed (wpm)</label>
+                            <md-select ng-model="chosen_speed">
+                                <md-option ng-repeat="speed in est_speeds" value="{{speed}}">
+                                    {{speed}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        {{chosen_speed}}
+                    </div>
+                    <div flex></div>
+                </div>
+            </form>
+        </div>-->
+
+
+    </body>
+</html>
