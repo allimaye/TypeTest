@@ -7,20 +7,19 @@
                 <div class="md-toolbar-tools">
                     <h1>User information</h1>
                     <span flex></span>
-                    <md-button class="md-icon-button" ng-click="closeDialog()">
+                    <md-button class="md-icon-button" ng-click="closeUserInfoDialog()">
                         <md-icon md-svg-src="images/stats_icon.svg" aria-label="Close dialog"></md-icon>
                     </md-button>
                 </div>
             </md-toolbar>
             <md-dialog-content>
                 <form ng-controller="FormController as formCtrl" class="md-padding">
-                    <h1 class="md-title">User information</h1>
                     <md-input-container class="md-block">
                         <label>First Name</label>
                         <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
                         <input ng-model="user.firstname">
                     </md-input-container>
-                    <md-input-container>
+                    <md-input-container class="md-block">
                         <label>Last Name</label>
                         <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
                         <input ng-model="user.lastname">
@@ -38,7 +37,7 @@
                 </form>
             </md-dialog-content>
             <md-dialog-actions>
-                <md-button ng-click="closeDialog()" class="md-primary">OK</md-button>
+                <md-button ng-click="closeUserInfoDialog()" class="md-primary">OK</md-button>
             </md-dialog-actions>
         </md-dialog>
 

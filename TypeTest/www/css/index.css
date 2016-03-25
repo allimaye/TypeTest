@@ -1,4 +1,15 @@
 ﻿
+@font-face {
+  font-family: "SevenSegment";
+  src: url('fonts/digital-7 (mono).ttf') format("truetype");
+}
+
+
+.header-font 
+{ 
+    font-family: "SevenSegment", sans-serif 
+}
+
 
 .center-submit
 {
@@ -26,4 +37,20 @@
 {
      background-color: #ff9999; 
      color: #ff1a1a;
+}
+
+.stretch-height
+{
+    height: 100%;
+}
+
+.icon-s48 
+{
+    width: 48px;
+    height: 48px;
+}
+
+.space-stats
+{
+    margin: 5%;
 }

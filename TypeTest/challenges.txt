@@ -1,3 +1,7 @@
 Challenge 1: Getting angular to detect ANY change in the input text
 Challenge 2: Detecting space character since $scope.$watch doesn't do it automatically. This had to be done through jQuery "keypress" event.
 
+Challenge 3: Using naive algorithm of words divided by minutes is not the solution. The algorithm of taking average number of chars per word is too unforgiving; so a mix of the two needed to be used.
+
+Challege 4: Counting accuracy. What inputted characters to consider to total char count? It should be a new character typed but not a space.
+

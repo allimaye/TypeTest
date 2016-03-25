@@ -7,14 +7,14 @@
             <div class="md-toolbar-tools">
                 <h1>Instructions</h1>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="closeDialog()">
+                <md-button class="md-icon-button" ng-click="closeInstructionDialog()">
                     <md-icon md-svg-src="images/stats_icon.svg" aria-label="Close dialog"></md-icon>
                 </md-button>
             </div>
         </md-toolbar>
         <md-dialog-content>
             <div class="md-dialog-content">
-                <ul>
+                <ol>
                     <li>1. Fill out user information</li>
                     <li>2. After clicking "OK", you will see a signal to indicate you should start typing</li>
                     <li>3. Type the paragraph in colored words into the text box above it as fast as you can.</li>
@@ -30,11 +30,11 @@
 
                         Have fun!   
                     </p>
-                </ul>
+                </ol>
             </div>
         </md-dialog-content>
         <md-dialog-actions>
-            <md-button ng-click="closeDialog()" class="md-primary">OK</md-button>
+            <md-button ng-click="closeInstructionDialog()" class="md-primary">OK</md-button>
         </md-dialog-actions>
     </md-dialog>
 </body>

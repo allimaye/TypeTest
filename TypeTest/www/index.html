@@ -9,153 +9,119 @@
         <!-- TypeTest references -->
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
         <link href="css/index.css" rel="stylesheet" />
-        <!--<link href="bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="bootstrap-3.3.6-dist/css/bootstrap-theme.min.css" rel="stylesheet" />-->
-   
-
-   
-
 
     </head>
     <body style="background-color:#d1d1e0">
-
-        <header>
-            <div layout="row" layout-wrap>
-                <div flex="100">
-                    <center><h1>TypeTest</h1></center>
-                </div>
-            </div>
-        </header>
-
-        <!--<div class="container">
-            <div class="row">
-                <form ng-controller="formController as formCtrl">
-                    <div class="col-xs-5">
-                        <fieldset class="form-group">
-                            <label for="exampleInputEmail1">First name</label>
-                            <input type="text" class="form-control" id="inputFirstName" placeholder="Enter first name">
-                            <small class="text-muted">We'll never share your email with anyone else.</small>
-                        </fieldset>
-                    </div>
-                    <div class="col-xs-5">
-                        <fieldset class="form-group">
-                            <label for="exampleInputPassword1">Last name</label>
-                            <input type="text" class="form-control" id="inputLastName" placeholder="Enter last name">
-                        </fieldset>
-                    </div>
-                    <div class="col-xs-2">
-                        <button type="submit" style="margin-top: 25px"class="btn btn-primary">Let's Go!</button>
-                    </div>
-                </form>
-            </div>
-        </div>-->
-
-
-
-
         <md-content layout-padding>
-            
-
+            <center><span class="header-font md-display-3">TypeTest</span></center>
             <div ng-controller="InputController as inputCtrl">
-
                 <div>
                     <div layout="row" layout-wrap>
-                        <div flex="50">
+                        <div flex="70">
                             <md-input-container  class="md-block">
-                                <label>Text</label>
-                                <input ng-model="inputVal" id="paragraphInput" data-ng-trim="false" 
-                                       style="background-color: #ffffff; color: #000000;">
+                                <label class="md-title">Type Here</label>
+                                <input class="md-headline" ng-model="inputVal" id="paragraphInput" data-ng-trim="false" 
+                                       style="background-color: #ffffff; color: #000000;" autofocus>
                                 <strong ng-show="inputError">Oops! You messed up!</strong>
                                 {{debugVal}}
                             </md-input-container>
-                        </div>
-                        <div flex="5"></div>
-                        <div flex="35">
+
                             <md-card>
-                                <md-card-header>
-                                    <md-card-avatar>
-                                        <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
-                                    </md-card-avatar>
-                                    <md-card-header-text>
-                                        <span class="md-title">Statistics</span>
-                                    </md-card-header-text>
-                                </md-card-header>
-                                <md-card-content>
-                                    <md-input-container class="md-block">
-                                        <label>Progress</label>
-                                        <md-progress-linear md-mode="determinate" value="{{determinateValue}}"></md-progress-linear>
-                                    </md-input-container>
-                                </md-card-content>
                                 <md-card-title>
                                     <md-card-title-text>
-                                        <span class="md-subhead">
-                                            <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
-                                            Speed: {{speed}} wpm
-                                        </span>
-                                    </md-card-title-text>
-                                    <md-card-title-text>
-                                        <span class="md-subhead">
-                                            <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
-                                            Accuracy: {{accuracy}} %
-                                        </span>
-                                    </md-card-title-text>
-                                    <md-card-title-text>
-                                        <span class="md-subhead">
-                                            <md-icon class="md-avatar-icon" md-svg-icon="images/stats_icon.svg"></md-icon>
-                                            Precision: {{precision}} %
-                                        </span>
+                                        <span class="md-display-1">{{paragraphTitle}}</span>
                                     </md-card-title-text>
                                 </md-card-title>
+                                <md-card-content>
+                                    <p>
+                                        <span class="md-headline" ng-repeat="word in paragraph track by $index">
+                                            <span ng-class="{'boldWord': word.value == currentWord}" style="color:{{word.color}}">
+                                                {{word.value}}
+                                            </span>
+                                        </span>
+                                    </p>
+                                </md-card-content>
+                                <md-card-actions layout="row" layout-align="end center">
+                                    <md-button ng-click="textToSpeech = !textToSpeech">{{textToSpeech ? "Disable" : "Enable"}} Text to Speech</md-button>
+                                </md-card-actions>
+                            </md-card>
+
+                        </div>
+                        <div flex="30">
+                            <md-card class="stretch-height">
+
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <md-icon class="md-avatar-icon icon-s48" md-svg-icon="images/stats_icon.svg"></md-icon>
+                                    </md-card-title-text>
+                                    <md-card-title-text>
+                                        <span class="md-display-1">Statistics</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+
+                                <md-card-content layout="column" layout-align="space-around stretch">
+                                    <div layout="row" layout-align="space-around center" class="space-stats">
+                                        <div flex="50">
+                                            <center><span class="md-title">Progress: {{progress | number:0}} %</span></center>
+                                        </div>
+                                        <div flex="50">
+                                            <center>
+                                                <md-progress-linear md-mode="determinate" value="{{progress}}"></md-progress-linear>
+                                            </center>
+                                        </div>
+                                    </div>
+                                    
+                                    <div layout="row" layout-align="space-around center" class="space-stats">
+                                        <div flex="30">
+                                            <center><md-icon md-svg-icon="images/speed_icon.svg" class="icon-s48"></md-icon></center>
+                                        </div>
+                                        <div flex="70">
+                                            <center><span class="md-title">Speed: {{speed}} wpm</span></center>
+                                        </div>
+                                    </div>
+                                    <div layout="row" layout-align="space-around center" class="space-stats">
+                                        <div flex="30">
+                                            <center><md-icon md-svg-icon="images/accuracy_icon.svg" class="icon-s48"></md-icon></center>
+                                        </div>
+                                        <div flex="70">
+                                            <center><span class="md-title">Accuracy: {{accuracy}} %</span></center>
+                                        </div>
+                                    </div>
+                                    <div layout="row" layout-align="space-around center" class="space-stats">
+                                        <div flex="100">
+                                            <center><span class="header-font md-display-2">{{timerTime}}</span></center>
+                                        </div>
+                                    </div>
+
+
+                                    <!--<md-card-title>
+                                        <md-card-title-text>
+                                            <md-icon md-svg-icon="images/speed_icon.svg" class="icon-s48"></md-icon>
+                                        </md-card-title-text>
+                                        <md-card-title-text>
+                                            <span class="md-title">Speed: {{speed}} wpm </span>
+                                        </md-card-title-text>
+                                    </md-card-title>-->
+                                </md-card-content>
                             </md-card>
                         </div>
-                        <div flex="10"></div>
                     </div>
                 </div>
-
-                <div>
-                    <md-card>
-                        <md-card-title>
-                            <md-card-title-text>
-                                <span class="md-headline">Twinkle Twinkle Little Star</span>
-                            </md-card-title-text>
-                        </md-card-title>
-                        <md-card-content>
-                            <p>
-                                <span ng-repeat="word in paragraph track by $index"> 
-                                    <span ng-class="{'boldWord': word.value == currentWord}" style="color:{{word.color}}">
-                                        {{word.value}}
-                                    </span>
-                                </span>
-                            </p>
-                        </md-card-content>
-                        <md-card-actions layout="row" layout-align="end center">
-                            <md-button ng-click="textToSpeech = !textToSpeech">{{textToSpeech ? "Disable" : "Enable"}} Text to Speech</md-button>
-                            <md-button ng-click="showTestDialog()">Go!</md-button>
-                        </md-card-actions>
-                    </md-card>
-                </div>
             </div>
-
         </md-content>
 
-
-
-
-
-
-
-                <!-- Angular Material requires Angular.js Libraries -->
-                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
-                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
-                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
-                <!-- Angular Material Library -->
-                <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-                <!--ResponsiveVoiceJS-->
-                <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
-                <!-- Script folder refrences -->
-                <script type="text/javascript" src="scripts/jquery-2.2.0.min.js"></script>
-                <script type="text/javascript" src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
-                <script type="text/javascript" src="scripts/typetest.js"></script>
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+        <!-- Angular Material Library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+        <!--ResponsiveVoiceJS-->
+        <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+        <!-- Script folder refrences -->
+        <script type="text/javascript" src="scripts/jquery-2.2.0.min.js"></script>
+        <script type="text/javascript" src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="scripts/typetest.js"></script>
     </body>
 </html>
