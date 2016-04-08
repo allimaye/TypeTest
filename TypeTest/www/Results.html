@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<html>
+<body>
+    <md-dialog ng-controller="InputController as inputCtrl">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h1>Results</h1>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="answerToResults('OK')">
+                    <md-icon md-svg-src="images/stats_icon.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <span class="md-headline">Here are your results:</span>
+                <ul>
+                    <li>Estimated Typing Speed: {{user.estimatedSpeed}}</li>
+                    <li>Actual Typing Speed: {{metrics.speed}}</li>
+                    <li>Accuracy: {{metrics.accuracy}}</li>
+                </ul>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button ng-click="answerToResults('OK')" class="md-primary">OK</md-button>
+            <md-button ng-click="answerToResults('Play Again')" class="md-primary">Play Again</md-button>
+        </md-dialog-actions>
+    </md-dialog>
+</body>
+</html>

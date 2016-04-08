@@ -23,7 +23,6 @@
                                 <input class="md-headline" ng-model="inputVal" id="paragraphInput" data-ng-trim="false" 
                                        style="background-color: #ffffff; color: #000000;" autofocus>
                                 <strong ng-show="inputError">Oops! You messed up!</strong>
-                                {{debugVal}}
                             </md-input-container>
 
                             <md-card>
@@ -47,9 +46,8 @@
                             </md-card>
 
                         </div>
-                        <div flex="30">
+                        <div flex="30" id="stats">
                             <md-card class="stretch-height">
-
                                 <md-card-title>
                                     <md-card-title-text>
                                         <md-icon class="md-avatar-icon icon-s48" md-svg-icon="images/stats_icon.svg"></md-icon>
@@ -62,11 +60,11 @@
                                 <md-card-content layout="column" layout-align="space-around stretch">
                                     <div layout="row" layout-align="space-around center" class="space-stats">
                                         <div flex="50">
-                                            <center><span class="md-title">Progress: {{progress | number:0}} %</span></center>
+                                            <center><span class="md-title">Progress: {{metrics.progress | number:0}} %</span></center>
                                         </div>
                                         <div flex="50">
                                             <center>
-                                                <md-progress-linear md-mode="determinate" value="{{progress}}"></md-progress-linear>
+                                                <md-progress-linear md-mode="determinate" value="{{metrics.progress}}"></md-progress-linear>
                                             </center>
                                         </div>
                                     </div>
@@ -76,7 +74,7 @@
                                             <center><md-icon md-svg-icon="images/speed_icon.svg" class="icon-s48"></md-icon></center>
                                         </div>
                                         <div flex="70">
-                                            <center><span class="md-title">Speed: {{speed}} wpm</span></center>
+                                            <center><span class="md-title">Speed: {{metrics.speed}} wpm</span></center>
                                         </div>
                                     </div>
                                     <div layout="row" layout-align="space-around center" class="space-stats">
@@ -84,12 +82,12 @@
                                             <center><md-icon md-svg-icon="images/accuracy_icon.svg" class="icon-s48"></md-icon></center>
                                         </div>
                                         <div flex="70">
-                                            <center><span class="md-title">Accuracy: {{accuracy}} %</span></center>
+                                            <center><span class="md-title">Accuracy: {{metrics.accuracy <= 100 ? metrics.accuracy : 100}} %</span></center>
                                         </div>
                                     </div>
                                     <div layout="row" layout-align="space-around center" class="space-stats">
                                         <div flex="100">
-                                            <center><span class="header-font md-display-2">{{timerTime}}</span></center>
+                                            <center><span class="header-font md-display-2">{{times.timerTime}}</span></center>
                                         </div>
                                     </div>
 

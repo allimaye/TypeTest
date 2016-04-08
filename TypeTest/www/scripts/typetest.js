@@ -5,54 +5,118 @@
 
     var app = angular.module('typeTest', ['ngMaterial', 'ngMessages']);
 
-    app.controller('FormController', function ($scope) {
-        $scope.user = currentUser;
-        $scope.est_speeds = type_speeds;
-        $scope.chosen_speed = '';
+
+
+    app.service('UpdateSvc', function () {
+
+        this.updateUIColors = function (inputError, paragraph, counter) {
+
+            if (inputError) {
+                //update text input color
+                $("#paragraphInput").css({ "background-color": "#ff9999", "color": "#ff1a1a" });
+
+                //update word color
+                paragraph[counter].color = "red"
+            }
+            else {
+                //update text input color
+                $("#paragraphInput").css({ "background-color": "#ffffff", "color": "#000000" });
+
+                //update word color
+                paragraph[counter].color = "black"
+            }
+
+        };
+
+        this.updateStatistics = function (times, correctChars, wordsPerChar, typedChars, metrics) {
+
+            //update typing speed
+            times.currentTime = new Date();
+            var timeDiffInMins = (times.currentTime.getTime() - times.startTime.getTime()) / 1000 / 60;
+            var charsPerMin = correctChars / timeDiffInMins;
+            var wpm = wordsPerChar * charsPerMin;
+            metrics.speed = Math.round(wpm);
+
+            //update accuracy
+            metrics.accuracy = Math.round((correctChars / typedChars) * 100);
+        };
+
+        this.updateProgressBar = function (metrics, counter, wordSplitLength) {
+            metrics.progress = (counter / wordSplitLength) * 100;
+        };
+
 
     });
 
-    app.controller('InputController', function ($scope, $mdDialog, $interval, $filter) {
 
-        var words = getRandomParagraph("sample_paragraphs.txt");
-        //var words = "first second third fourth fifth sixth seventh eighth ninth tenth";
-        var wordSplit = words.split(' ');
-        //$scope.paragraph = getRandomParagraph("sample_paragraphs.txt");
-        $scope.paragraph = [];
-        $scope.totalCorrectChars = 0;
-        for (var i = 0; i < wordSplit.length; i++)
-        {
-            $scope.paragraph.push({ "value": wordSplit[i], "color": "black" });
-            $scope.totalCorrectChars += wordSplit[i].length;
-        }
+    app.controller('InputController', function ($scope, $mdDialog, $interval, $filter, UpdateSvc) {
 
-        $scope.wordsPerChar = wordSplit.length / $scope.totalCorrectChars;
-        $scope.wordSplitLength = wordSplit.length;
-        $scope.startTime = null;
-        $scope.currentTime = null;
-        //$scope.startTime = new Date();
-        //$scope.currentTime = $scope.startTime;
-        $scope.timerTime = "";
-        $scope.timerHandle = null;
+        //controller variables
+        var words;
+        var wordSplit;
+        $scope.paragraph;
+        $scope.totalCorrectChars;
+        $scope.wordsPerChar;
+        $scope.wordSplitLength;
+        $scope.times;
+        $scope.inputVal;
+        $scope.textToSpeech;
+        $scope.currentWord;
+        $scope.counter;
+        $scope.wordCorrect;
+        $scope.inputError;
+        $scope.correctChars;
+        $scope.typedChars;
+        $scope.metrics;
+        $scope.user;
 
-        $scope.inputVal = "";
-        $scope.debugVal = "";
-        $scope.textToSpeech = false;
 
-        $scope.currentWord = $scope.paragraph[0].value;
-        $scope.counter = 0;
-        $scope.wordCorrect = false;
-        $scope.inputError = false;
-        $scope.correctChars = 0;
-        $scope.typedChars = 0;
-        $scope.progress = $scope.correctChars / $scope.totalCorrectChars;
 
-        $scope.speed = 20;
-        $scope.accuracy = 90;
+        $scope.init = function () {
+
+            words = getRandomParagraph("sample_paragraphs.txt");
+            //var words = "first second third fourth fifth sixth seventh eighth ninth tenth";
+            wordSplit = words.split(' ');
+            //$scope.paragraph = getRandomParagraph("sample_paragraphs.txt");
+            $scope.paragraph = [];
+            $scope.totalCorrectChars = 0;
+
+            for (var i = 0; i < wordSplit.length; i++) {
+                $scope.paragraph.push({ "value": wordSplit[i], "color": "black" });
+                $scope.totalCorrectChars += wordSplit[i].length;
+            }
+
+            $scope.wordsPerChar = wordSplit.length / $scope.totalCorrectChars;
+            $scope.wordSplitLength = wordSplit.length;
+            $scope.times = {
+                startTime: new Date(),
+                currentTime: new Date(),
+                timerTime: "",
+                timerHandle: null
+            };
+
+
+            $scope.inputVal = "";
+            $scope.debugVal = "";
+            $scope.textToSpeech = false;
+
+            $scope.currentWord = $scope.paragraph[0].value;
+            $scope.counter = 0;
+            $scope.wordCorrect = false;
+            $scope.inputError = false;
+            $scope.correctChars = 0;
+            $scope.typedChars = 0;
+
+            $scope.metrics = {
+                speed: 20,
+                accuracy: 90,
+                progress: $scope.correctChars / $scope.totalCorrectChars
+            };
+        };
+
+
 
         $scope.$watch('inputVal', function (newVal, oldVal) {
-
-            
 
             var lastChar = newVal.charAt(newVal.length - 1);
 
@@ -105,71 +169,14 @@
                 $scope.correctChars += $scope.inputError || newVal.length < oldVal.length ? 0 : 1;
             }
 
-
-            //$scope.debugVal = "newVal: " + newVal + ", oldVal: " + oldVal + ", correctChars: " + $scope.correctChars;
-            $scope.debugVal = "startTime" + $scope.startTime + ", currentTime "+ $scope.currentTime;
-
-            updateUIColors($scope.inputError)
-            updateStatistics();
-            updateProgressBar();
+            UpdateSvc.updateUIColors($scope.inputError, $scope.paragraph, $scope.counter);
+            UpdateSvc.updateStatistics($scope.times, $scope.correctChars, $scope.wordsPerChar,
+                                            $scope.typedChars, $scope.metrics);
+            UpdateSvc.updateProgressBar($scope.metrics, $scope.counter, $scope.wordSplitLength);
             
 
         });
 
-
-
-        
-
-        function updateProgressBar()
-        {
-            $scope.progress = ($scope.counter / $scope.wordSplitLength) * 100;
-        }
-        
-        function updateStatistics()
-        {
-            //update typing speed
-            $scope.currentTime = new Date();
-            var timeDiffInMins = ($scope.currentTime.getTime() - $scope.startTime.getTime()) / 1000 / 60;
-            var charsPerMin = $scope.correctChars / timeDiffInMins;
-            var wpm = $scope.wordsPerChar * charsPerMin;
-            $scope.speed = Math.round(wpm);
-
-            //update accuracy
-            $scope.accuracy = Math.round(($scope.correctChars / $scope.typedChars) * 100);
-            
-
-        }
-
-        function updateTimer()
-        {
-            //var milliseconds = (new Date().getTime() - $scope.startTime.getTime());
-            //var seconds = (milliseconds / 1000);
-            //var minutes = seconds / 60;
-            //$scope.timerTime = ("0" + Math.round(minutes)).slice(-2) + ":" +
-            //                        ("0" + Math.round(seconds)).slice(-2) + ":" +
-            //                        ("0" + Math.round(milliseconds)).slice(-3);
-
-            $scope.timerTime = $filter('date')(new Date().getTime() - $scope.startTime.getTime(), "mm:ss:sss");
-        }
-
-        function updateUIColors(inputError)
-        {
-            if (inputError) {
-                //update text input color
-                $("#paragraphInput").css({ "background-color": "#ff9999", "color": "#ff1a1a" });
-
-                //update word color
-                $scope.paragraph[$scope.counter].color = "red"
-            }
-            else
-            {
-                //update text input color
-                $("#paragraphInput").css({ "background-color": "#ffffff", "color": "#000000" });
-
-                //update word color
-                $scope.paragraph[$scope.counter].color = "black"
-            }
-        }
 
         function getRandomParagraph(file) {
 
@@ -199,7 +206,11 @@
 
         function endOfTest()
         {
-            $scope.counter++;
+            $scope.inputVal = "";
+            UpdateSvc.updateStatistics($scope.times, $scope.correctChars, $scope.wordsPerChar,
+                                            $scope.typedChars, $scope.metrics);
+            UpdateSvc.updateProgressBar($scope.metrics, $scope.counter, $scope.wordSplitLength);
+            
         }
 
 
@@ -223,14 +234,19 @@
                     };
 
                     $scope.closeInstructionDialog = function () {
-                        $mdDialog.hide();
+                        //$mdDialog.hide();
                         $scope.showUserInfoDialog();
                     };
 
                     $scope.closeUserInfoDialog = function () {
-                        $mdDialog.hide();
+                        //$mdDialog.hide();
                         $scope.showTrafficLightAnimation();
                     };
+
+                    //$scope.answerToResults = function (answer) {
+                    //    $mdDialog.hide();
+                    //    if (answer === "Play Again") $scope.init();
+                    //};
                 }
             });
 
@@ -241,15 +257,14 @@
             $mdDialog.show({
                 scope: $scope,        // use parent scope in template
                 preserveScope: true,
-                templateUrl: 'UserInfo.html',
+                templateUrl: 'UserInfo.html'
                 
             }).then(function () {
                 $("#paragraphInput").focus();
             });
         };
         
-        $scope.showTrafficLightAnimation = function ()
-        {
+        $scope.showTrafficLightAnimation = function () {
             $mdDialog.show({
                 template:
                   '<md-dialog layout-wrap>' +
@@ -261,51 +276,44 @@
                 autoWrap: false
             });
 
-            
+
             // When the 'enter' animation finishes...
             function afterShowAnimation(scope, element, options) {
                 setTimeout(function () {
                     $mdDialog.hide();
-                    $scope.startTime = new Date();
-                    $scope.currentTime = new Date();
-                    $scope.timerHandle = $interval(updateTimer, 10);
+                    $scope.times.startTime = new Date();
+                    $scope.times.currentTime = new Date();
+                    $scope.times.timerHandle = $interval(updateTimer, 10);
                 }, 4500);
             }
 
-        }
+            function updateTimer() {
+                $scope.times.timerTime = $filter('date')(new Date().getTime() - $scope.times.startTime.getTime(), "mm:ss:sss");
+            }
 
+        };
+
+        //$scope.showResultsDialog = function () {
+        //    var statsCard = angular.element(document.querySelector('#stats'));
+
+        //    $mdDialog.show({
+        //        scope: $scope,        // use parent scope in template
+        //        preserveScope: true,
+        //        templateUrl: 'Instructions.html',
+        //        openFrom: statsCard
+        //    });
+           
+        //};
+        
+        $scope.user = {
+            firstname: '',
+            lastname: '',
+            estimatedSpeed: 0
+        };
+        $scope.init();
         $scope.showInstructionDialog();
 
     });
-
-
-    app.controller('AppCtrl', function() {
-        this.userState = '';
-        this.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS ' +
-            'MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI ' +
-            'WY').split(' ').map(function (state) { return { abbrev: state }; });
-    });
-
-    var currentUser = {
-        firstname: '',
-        lastname:''
-    }
-
-    var type_speeds = [];
-
-    for(var i = 0; i < 150; i+=5)
-    {
-        type_speeds.push(i);
-    }
-
-
-
-
-    //$scope.$on('$viewContentLoaded', function () {
-    //    var x = 2;
-    //});
-    
-
 
 })();
 
