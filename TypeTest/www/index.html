@@ -18,7 +18,7 @@
                 <div>
                     <div layout="row" layout-wrap>
                         <div flex="70">
-                            <md-input-container  class="md-block">
+                            <md-input-container id="textInput" class="md-block">
                                 <label class="md-title">Type Here</label>
                                 <input class="md-headline" ng-model="inputVal" id="paragraphInput" data-ng-trim="false" 
                                        style="background-color: #ffffff; color: #000000;" autofocus>
@@ -41,7 +41,9 @@
                                     </p>
                                 </md-card-content>
                                 <md-card-actions layout="row" layout-align="end center">
-                                    <md-button ng-click="textToSpeech = !textToSpeech">{{textToSpeech ? "Disable" : "Enable"}} Text to Speech</md-button>
+                                    <md-button ng-click="textToSpeech = !textToSpeech" class="md-fab md-raised" aria-label="Text to speech">
+                                        <md-icon md-svg-src='images/{{textToSpeech ? "mute_icon.svg" : "sound_icon.svg"}}'></md-icon>
+                                    </md-button>
                                 </md-card-actions>
                             </md-card>
 
