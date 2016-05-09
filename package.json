@@ -1,0 +1,31 @@
+{
+  "name": "typetest",
+  "version": "1.0.2",
+  "description": "\"•Allows user to measure their typing speed in real time\"",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allimaye/TypeTest.git"
+  },
+  "keywords": [
+    "Typing",
+    "measure",
+    "speed",
+    "live",
+    "dictation",
+    "feedback"
+  ],
+  "author": "Aniket Limaye",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/allimaye/TypeTest/issues"
+  },
+  "homepage": "https://github.com/allimaye/TypeTest#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "morgan": "^1.7.0"
+  }
+}
