@@ -311,7 +311,7 @@
                   .textContent(results)
                   .ariaLabel('Finished!')
                   .openFrom(statsCard)
-                  .ok('Play Again')
+                  .ok('Try Again')
                   .cancel('Cancel');
             $mdDialog.show(confirm).then(function () {
                 $scope.init(false);
