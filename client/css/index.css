@@ -59,3 +59,8 @@
 {
     border: 2px solid red;
 }
+
+.highlight-background
+{
+    background-color:yellow;
+}

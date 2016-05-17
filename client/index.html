@@ -19,21 +19,21 @@
                     <div layout="row" layout-wrap>
                         <div flex="70">
                             <md-input-container id="textInput" class="md-block">
-                                <label class="md-title">Type Here</label>
-                                <input class="md-headline" ng-model="inputVal" id="paragraphInput" data-ng-trim="false" 
-                                       style="background-color: #ffffff; color: #000000;" autofocus>
-                                <strong ng-show="inputError">Oops! You messed up!</strong>
+                                <label>Type Here</label>
+                                <input ng-model="inputVal" id="paragraphInput" data-ng-trim="false" 
+                                       style="background-color:white; color:black;" autofocus>
+                                <strong ng-show="inputError">Oops! Incorrect spelling!</strong>
                             </md-input-container>
 
                             <md-card>
                                 <md-card-title>
                                     <md-card-title-text>
-                                        <span class="md-display-1">{{paragraphTitle}}</span>
+                                        <span class="md-headline">{{paragraphTitle}}</span>
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-content>
                                     <p>
-                                        <span class="md-headline" ng-repeat="word in paragraph track by $index">
+                                        <span class="md-title" ng-repeat="word in paragraph track by $index">
                                             <span ng-class="{'boldWord': word.value == currentWord}" style="color:{{word.color}}">
                                                 {{word.value}}
                                             </span>

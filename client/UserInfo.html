@@ -27,10 +27,10 @@
                     <md-slider-container class="md-block">
                         <span>Estimated Typing Speed (wpm)</span>
                         <div layout="row" layout-align="space-around center">
-                            <md-slider flex="70" min="0" max="175" ng-model="user.estimatedSpeed" aria-label="red" id="red-slider">
+                            <md-slider flex="70" min="10" max="175" ng-model="user.estimatedSpeed" aria-label="red" id="red-slider">
                             </md-slider>
                             <div flex="10"></div>
-                            <input flex="20" type="number" ng-model="user.estimatedSpeed" min="0" max="175"
+                            <input flex="20" type="number" ng-model="user.estimatedSpeed" min="10" max="175"
                                    aria-label="red" aria-controls="red-slider" style="text-align:center">
                         </div>
                     </md-slider-container>

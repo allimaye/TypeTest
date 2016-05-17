@@ -34,8 +34,16 @@
             times.currentTime = new Date();
             var timeDiffInMins = (times.currentTime.getTime() - times.startTime.getTime()) / 1000 / 60;
             var charsPerMin = correctChars / timeDiffInMins;
-            var wpm = wordsPerChar * charsPerMin;
-            metrics.speed = Math.round(wpm);
+            //most logical but also most taxing way to determine typing speed
+            var wpm1 = wordsPerChar * charsPerMin;
+            //For the second approach, take the average length of a word in English to be 5.1 characters
+            var wordsPerChar2 = 1 / 5.1;
+            var wpm2 = wordsPerChar2 * charsPerMin;
+
+            //take weigted average of results from both algorithms
+            var combined = wpm1 * 0.7 + wpm2 * 0.3;
+            combined *= 1.15;
+            metrics.speed = Math.round(combined);
 
             //update accuracy
             metrics.accuracy = Math.round((correctChars / typedChars) * 100);
@@ -72,7 +80,7 @@
 
 
 
-        $scope.init = function () {
+        $scope.init = function (firstTime) {
 
             words = getRandomParagraph("sample_paragraphs.txt");
             //var words = "first second third fourth fifth sixth seventh eighth ninth tenth";
@@ -92,7 +100,8 @@
                 startTime: new Date(),
                 currentTime: new Date(),
                 timerTime: "",
-                timerHandle: null
+                timerHandle: null,
+                inputFlashHandle: null,
             };
 
 
@@ -112,6 +121,11 @@
                 accuracy: 90,
                 progress: $scope.correctChars / $scope.totalCorrectChars
             };
+
+            if(!firstTime)
+            {
+                $scope.times.timerHandle = $interval(updateTimerAndStats, 10);
+            }
         };
 
 
@@ -170,8 +184,8 @@
             }
 
             UpdateSvc.updateUIColors($scope.inputError, $scope.paragraph, $scope.counter);
-            UpdateSvc.updateStatistics($scope.times, $scope.correctChars, $scope.wordsPerChar,
-                                            $scope.typedChars, $scope.metrics);
+            //UpdateSvc.updateStatistics($scope.times, $scope.correctChars, $scope.wordsPerChar,
+            //                                $scope.typedChars, $scope.metrics);
             UpdateSvc.updateProgressBar($scope.metrics, $scope.counter, $scope.wordSplitLength);
             
 
@@ -192,13 +206,10 @@
             }
             rawFile.send(null);
 
-            
-
             //select a random paragraph from the text file
-            var random = Math.floor((Math.random() * 3));
-
+            var numParagraphs = fileText.split('%').length;
+            var random = Math.floor((Math.random() * numParagraphs));
             var allText = fileText.split('%')[random].trim();
-
             $scope.paragraphTitle = allText.split('>')[0].trim();
 
             return allText.split('>')[1].trim();
@@ -210,6 +221,9 @@
             UpdateSvc.updateStatistics($scope.times, $scope.correctChars, $scope.wordsPerChar,
                                             $scope.typedChars, $scope.metrics);
             UpdateSvc.updateProgressBar($scope.metrics, $scope.counter, $scope.wordSplitLength);
+            $interval.cancel($scope.times.timerHandle);
+
+            $scope.showResultsDialog();
             
         }
 
@@ -234,19 +248,12 @@
                     };
 
                     $scope.closeInstructionDialog = function () {
-                        //$mdDialog.hide();
                         $scope.showUserInfoDialog();
                     };
 
                     $scope.closeUserInfoDialog = function () {
-                        //$mdDialog.hide();
                         $scope.showTrafficLightAnimation();
                     };
-
-                    //$scope.answerToResults = function (answer) {
-                    //    $mdDialog.hide();
-                    //    if (answer === "Play Again") $scope.init();
-                    //};
                 }
             });
 
@@ -260,7 +267,7 @@
                 templateUrl: 'UserInfo.html'
                 
             }).then(function () {
-                $("#paragraphInput").focus();
+                $scope.times.inputFlashHandle = $interval(flashRedBorder, 750);
             });
         };
         
@@ -268,9 +275,7 @@
             $mdDialog.show({
                 template:
                   '<md-dialog layout-wrap>' +
-                  //'     <md-dialog-content>' +
-                  '         <center><img src="../images/readySteadyGo.gif" height="232" width="122"/><center>' +
-                  //'     </md-dialog-content>' +
+                  '         <center><img src="../images/readySteadyGo2.gif" height="232" width="122"/><center>' +
                   '</md-dialog>',
                 onComplete: afterShowAnimation,
                 autoWrap: false
@@ -283,34 +288,55 @@
                     $mdDialog.hide();
                     $scope.times.startTime = new Date();
                     $scope.times.currentTime = new Date();
-                    $scope.times.timerHandle = $interval(updateTimer, 10);
-                }, 4500);
+                    $scope.times.timerHandle = $interval(updateTimerAndStats, 10);
+                }, 2000);
             }
+        };
 
-            function updateTimer() {
-                $scope.times.timerTime = $filter('date')(new Date().getTime() - $scope.times.startTime.getTime(), "mm:ss:sss");
-            }
+        function updateTimerAndStats() {
+            $scope.times.timerTime = $filter('date')(new Date().getTime() - $scope.times.startTime.getTime(), "mm:ss:sss");
+            UpdateSvc.updateStatistics($scope.times, $scope.correctChars, $scope.wordsPerChar,
+                                            $scope.typedChars, $scope.metrics);
+            
+        }
+
+        $scope.showResultsDialog = function () {
+            var statsCard = angular.element(document.querySelector('#stats'));
+
+            var results = "Your estimated typing speed was " + $scope.user.estimatedSpeed +
+                " wpm. Your actual speed was " + $scope.metrics.speed + " wpm.";
+
+            var confirm = $mdDialog.confirm()
+                  .title('Results for ' + $scope.user.firstname + ' ' + $scope.user.lastname)
+                  .textContent(results)
+                  .ariaLabel('Finished!')
+                  .openFrom(statsCard)
+                  .ok('Play Again')
+                  .cancel('Cancel');
+            $mdDialog.show(confirm).then(function () {
+                $scope.init(false);
+            }, function () {
+                //do nothing
+            });
 
         };
 
-        //$scope.showResultsDialog = function () {
-        //    var statsCard = angular.element(document.querySelector('#stats'));
+        //setup border flash to stop upon input focus
+        $("#paragraphInput").focus(function () {
+            $interval.cancel($scope.times.inputFlashHandle);
+            $("#textInput").removeClass("red-border");
+        });
 
-        //    $mdDialog.show({
-        //        scope: $scope,        // use parent scope in template
-        //        preserveScope: true,
-        //        templateUrl: 'Instructions.html',
-        //        openFrom: statsCard
-        //    });
-           
-        //};
+        function flashRedBorder() {
+            $("#textInput").toggleClass("red-border");
+        }
         
         $scope.user = {
             firstname: '',
             lastname: '',
-            estimatedSpeed: 0
+            estimatedSpeed: 10
         };
-        $scope.init();
+        $scope.init(true);
         $scope.showInstructionDialog();
 
     });
