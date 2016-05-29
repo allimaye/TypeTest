@@ -20,7 +20,7 @@
             }
             else {
                 //update text input color
-                $("#paragraphInput").css({ "background-color": "#ffffff", "color": "#000000" });
+                $("#paragraphInput").css({ "background-color": "#FCFFED", "color": "#000000" });
 
                 //update word color
                 paragraph[counter].color = "black"

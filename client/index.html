@@ -11,7 +11,7 @@
         <link href="css/index.css" rel="stylesheet" />
 
     </head>
-    <body style="background-color:#d1d1e0">
+    <body>
         <md-content layout-padding>
             <center><span class="header-font md-display-3">TypeTest</span></center>
             <div ng-controller="InputController as inputCtrl">
@@ -21,11 +21,11 @@
                             <md-input-container id="textInput" class="md-block">
                                 <label>Type Here</label>
                                 <input ng-model="inputVal" id="paragraphInput" data-ng-trim="false" 
-                                       style="background-color:white; color:black;" autofocus>
+                                       style="background-color:#FCFFED; color:black;" autofocus>
                                 <strong ng-show="inputError">Oops! Incorrect spelling!</strong>
                             </md-input-container>
 
-                            <md-card>
+                            <md-card style="background-color:#FCFFED">
                                 <md-card-title>
                                     <md-card-title-text>
                                         <span class="md-headline">{{paragraphTitle}}</span>
@@ -49,7 +49,7 @@
 
                         </div>
                         <div flex="30" id="stats">
-                            <md-card class="stretch-height">
+                            <md-card class="stretch-height" style="background-color:#FAFFFF">
                                 <md-card-title>
                                     <md-card-title-text>
                                         <md-icon class="md-avatar-icon icon-s48" md-svg-icon="images/stats_icon.svg"></md-icon>
